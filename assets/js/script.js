@@ -1,8 +1,4 @@
 
-// Colorcoded Timeblocks
-// past
-// present
-// future
 // Enter an event
 // save button saves to local storage
 // saved events persist
@@ -11,11 +7,15 @@
 var todayDate = moment().format('dddd, MMMM Do');
 $("#currentDay").html(todayDate);
 
+// variable for when saved button is pushed
+var saveBtn = $(".saveBtn");
+
+// function for description block colors based on time past, present, and future
 function timeBlockColor() {
     var hour = moment().hours();
-
     $(".time-block").each(function() {
         var timeNow = parseInt($(this).attr("id"));
+
         if (timeNow > hour) {
             $(this).addClass("future");
         } else if (timeNow === hour) {
@@ -26,3 +26,23 @@ function timeBlockColor() {
     })
 };
 timeBlockColor();
+
+// Save button will save what's typed in description in local storage
+saveBtn.on("click", function() {
+    var timeDescription = $(this).siblings(".hour").text();
+    var descriptionText = $(this).siblings(".description").val();
+    localStorage.setItem(timeDescription, descriptionText);
+});
+
+// retrieves saved description when refreshed
+function getDescription() {
+    $(".hour").each(function() {
+        var timeNow = $(this).text();
+        var planDescription = localStorage.getItem(timeNow);
+
+        if(planDescription !== null) {
+            $(this).siblings(".description").val(planDescription);
+        }
+    });
+}
+getDescription();
