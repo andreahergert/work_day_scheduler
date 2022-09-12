@@ -10,22 +10,28 @@ $("#currentDay").html(todayDate);
 // variable for when saved button is pushed
 var saveBtn = $(".saveBtn");
 
+
+
 // function for description block colors based on time past, present, and future
 function timeBlockColor() {
-    var hour = moment().hours();
+    var hour = moment().hour();
     $(".time-block").each(function() {
-        var timeNow = parseInt($(this).attr("id"));
+        var timeNow = parseInt($(this).attr("id").split("hour")[1]);
 
-        if (timeNow > hour) {
-            $(this).addClass("future");
-        } else if (timeNow === hour) {
-            $(this).addClass("present");
-        } else {
-            $(this).addClass("past");
+        if (hour < timeNow) {
+            $(this).addClass('future').removeClass("past present");
+        }
+        else if (hour > timeNow) {
+            $(this).addClass('past').removeClass("present future");
+        }
+        else if (hour === timeNow) {
+            $(this).addClass('present').removeClass("past future")
         }
     })
 };
 timeBlockColor();
+
+
 
 // Save button will save what's typed in description in local storage
 saveBtn.on("click", function() {
